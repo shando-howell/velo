@@ -1,0 +1,71 @@
+import { mutation, query } from "./_generated/server";
+import { v } from "convex/values";
+
+// Step 1: Generate the short-lived upload URL
+export const generateUploadUrl = mutation(
+    async (ctx) => {
+        return await ctx.storage.generateUploadUrl();
+    }
+);
+
+// Step 2: Save the car data and the storageId
+export const addCar = mutation({
+    args: {
+        make: v.string(),
+        model: v.string(),
+        year: v.number(),
+        price: v.number(),
+        imageId: v.id("_storage"), // This is the ID returned after upload,
+        isAvailable: v.boolean()
+    },
+    handler: async (ctx, args) => {
+        const carId = await ctx.db.insert("cars", {
+            make: args.make,
+            model: args.model,
+            year: args.year,
+            price: args.price,
+            imageId: args.imageId,
+            isAvailable: true,
+        });
+        return carId;
+    },
+});
+
+// Step 3: Helper to get the actual image URL for the frontend
+export const getImageUrl = query({
+    args: {storageId: v.id("_storage")},
+    handler: async (ctx, args) => {
+        return await ctx.storage.getUrl(args.storageId);
+    },
+});
+
+export const getInventory = query({
+    handler: async (ctx) => {
+        const cars = await ctx.db.query("cars").collect();
+
+        // Map through cars to include the actual image URL
+        return Promise.all(
+            cars.map(async (car) => ({
+                ...car,
+                imageUrl: car.imageId
+                    ? await ctx.storage.getUrl(car.imageId)
+                    : null,
+            }))
+        );
+    },
+});
+
+export const getCarById = query({
+    args: { id: v.id("cars")},
+    handler: async (ctx, args) => {
+        const car = await ctx.db.get(args.id);
+        if (!car) {
+            return null;
+        }
+
+        return {
+            ...car,
+            imageUrl: car.imageId ? await ctx.storage.getUrl(car.imageId): null,
+        };
+    },
+});
