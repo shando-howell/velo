@@ -16,7 +16,7 @@ export default function Home() {
           <h1 className="font-semibold text-5xl max-w-3xl text-center">
             Find your dream car.
           </h1>
-          <Button asChild className="mx-auto bg-yellow-600 hover:bg-yellow-400 p-8 text-lg text-gray-200 uppercase tracking-widest gap-5">
+          <Button asChild className="mx-auto bg-yellow-600 p-8 text-lg text-gray-200 uppercase tracking-widest gap-5">
             <Link href="/inventory">
               Explore Today
             </Link>

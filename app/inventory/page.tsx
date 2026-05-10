@@ -4,19 +4,20 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Image from "next/image";
 import Link from "next/link";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 export default function InventoryPage() {
     const cars = useQuery(api.cars.getInventory);
 
     if (cars === undefined) {
         return (
-            <p>Loading inventory...</p>
+            <LoadingSkeleton />
         )
     }
 
     return (
         <main className="max-w-7xl mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-8">
+            <h1 className="text-3xl text-yellow-600 font-bold mb-8">
                 Current Inventory
             </h1>
 
@@ -44,13 +45,13 @@ export default function InventoryPage() {
                             <h2 className="text-xl font-semibold">
                                 {car.year} {car.make} {car.model}
                             </h2>
-                            <p className="text-2xl font-bold text-blue-600 mt-2">
+                            <p className="text-2xl font-bold text-green-600 mt-2">
                                 ${car.price.toLocaleString()}
                             </p>
 
                             <Link
                                 href={`/inventory/${car._id}`}
-                                className="mt-4 block w-full text-center bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition"
+                                className="mt-4 block w-full text-center bg-yellow-600 text-white py-2 rounded-lg hover:bg-yellow-500 transition"
                             >
                                 View Details
                             </Link>
