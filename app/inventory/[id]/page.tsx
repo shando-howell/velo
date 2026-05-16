@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Id } from "@/convex/_generated/dataModel";
 import ManageListingButtons from "@/components/ManageListingButtons";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import BookingWidget from "@/components/BookingWidget";
 
 export default function CarDetailsPage() {
     const params = useParams();
@@ -57,12 +58,9 @@ export default function CarDetailsPage() {
                     </ul>
                 </div>
 
+                <BookingWidget carId={car._id}/>
+                {/* TO DO: Add admin auth check for manage listing buttons */}
                 <ManageListingButtons carId={car._id} initialData={car} />
-
-                {/* This is where the scheduling component will go */}
-                <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-4 rounded-xl font-bold transition">
-                    Schedule a Test Drive
-                </button>
             </div>
         </main>
     );
