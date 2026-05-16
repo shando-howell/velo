@@ -1,10 +1,14 @@
 "use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { 
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { EyeIcon, PencilIcon } from "lucide-react";
-import { useQuery } from "convex/react";
+import { EyeIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 
@@ -35,9 +39,6 @@ export default function ListingsTable() {
                         <TableHead className="text-white">
                             Price
                         </TableHead>
-                        <TableHead className="text-white">
-                            Status
-                        </TableHead>
                         <TableHead/>
                     </TableRow>
                 </TableHeader>
@@ -48,7 +49,6 @@ export default function ListingsTable() {
                                 <TableCell>{car.make}</TableCell>
                                 <TableCell>{car.model}</TableCell>
                                 <TableCell>{car.price}</TableCell>
-                                <TableCell>Status</TableCell>
                                 <TableCell className="flex justify-end gap-1">
                                     <Button asChild variant="outline" size="sm">
                                         <Link href={`/inventory/${car._id}`}>

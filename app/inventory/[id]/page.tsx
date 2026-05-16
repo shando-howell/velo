@@ -5,6 +5,8 @@ import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Id } from "@/convex/_generated/dataModel";
+import ManageListingButtons from "@/components/ManageListingButtons";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 export default function CarDetailsPage() {
     const params = useParams();
@@ -12,7 +14,9 @@ export default function CarDetailsPage() {
 
     const car = useQuery(api.cars.getCarById, { id: carId });
 
-    if (car === undefined) return <div className="p-10 text-center">Loading...</div>;
+    if (car === undefined) {
+        return <LoadingSkeleton />
+    }
     if (car === null) return <div className="p-10 text-center">Car not found.</div>;
 
     return (
@@ -52,6 +56,8 @@ export default function CarDetailsPage() {
                         <li className="bg-gray-50 p-3 rounded-lg">Transmission: Automatic</li>
                     </ul>
                 </div>
+
+                <ManageListingButtons carId={car._id} initialData={car} />
 
                 {/* This is where the scheduling component will go */}
                 <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-4 rounded-xl font-bold transition">

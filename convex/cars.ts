@@ -69,3 +69,39 @@ export const getCarById = query({
         };
     },
 });
+
+// Update car listing
+export const updateCar = mutation({
+    args: {
+        id: v.id("cars"),
+        make: v.string(),
+        model: v.string(),
+        year: v.number(),
+        price: v.number()
+    },
+    handler: async (ctx, args) => {
+        const {id, ...updates} = args;
+
+        // Updates only the provided fields, leaving imageId intact
+        await ctx.db.patch(id, updates);
+    },
+});
+
+// Delete mutation (Deleting both DB record and storage file)
+export const deleteCar = mutation({
+    args: {id: v.id("cars")},
+    handler: async (ctx, args) => {
+        const car = await ctx.db.get(args.id);
+        if (!car) {
+            throw new Error("Car not found.");
+        }
+
+        // Step 1: Delete the image from Convex Storage if it exists
+        if (car.imageId) {
+            await ctx.storage.delete(car.imageId);
+        }
+
+        // Step 1: Delete the car document from the database
+        await ctx.db.delete(args.id);
+    },
+});
