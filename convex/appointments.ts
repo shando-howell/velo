@@ -76,3 +76,33 @@ export const bookAppointment = mutation({
         });
     },
 });
+
+// Get all appointments and resolve car information for the admin layout
+export const getAllAppointments = query({
+    handler: async (ctx) => {
+        const appointments = await ctx.db.query("appointments").order("desc").collect();
+
+        // Map through appointments to append corresponding car information
+        return Promise.all(
+            appointments.map(async (appointment) => {
+                const car = await ctx.db.get(appointment.carId);
+
+                return {
+                    ...appointment,
+                    carDetails: car ? `${car.year} ${car.make} ${car.model}` : "Unknown vehicle."
+                };
+            })
+        );
+    },
+});
+
+// Change appointment status (pending to confirmed/cancelled)
+export const updateAppointmentStatus = mutation({
+    args: {
+        id: v.id("appointments"),
+        status: v.union(v.literal("pending"), v.literal("confirmed"), v.literal("cancelled")),
+    },
+    handler: async (ctx, args) => {
+        await ctx.db.patch(args.id, {status: args.status});
+    },
+});

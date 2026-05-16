@@ -9,8 +9,11 @@ const Dashboard = () => {
                     <h2>Dashboard</h2>
                 </div>
                 <div>
-                    <Link href="/admin/dashboard/add-listing" className="p-3 bg-yellow-600 hover:bg-yellow-500 text-white">
-                        Add Listing
+                    <Link href="/admin/dashboard/appointments" className="p-3 bg-yellow-600 hover:bg-yellow-500 text-white">
+                        Manage Appointments
+                    </Link>
+                    <Link href="/admin/dashboard/add-listing" className="p-3 bg-yellow-600 hover:bg-yellow-500 text-white ml-8">
+                        Add A New Listing
                     </Link>
                 </div>
             </div>
