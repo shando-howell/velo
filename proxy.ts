@@ -1,6 +1,28 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher  } from '@clerk/nextjs/server';
+import { NextResponse } from "next/server";
 
-export default clerkMiddleware();
+const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+
+export default clerkMiddleware(async (auth, req) => {
+  const authObj = await auth();
+
+  // If trying to access admin route
+  if (isAdminRoute(req)) {
+    // Force log in if unauthenticated
+    if (!authObj.userId) {
+      return (await auth()).redirectToSignIn({ returnBackUrl: req.url});
+    }
+
+    // Check metatdata role property, redirect home if not an admin
+    const sessionClaims = authObj.sessionClaims;
+    const sessionsRole  = sessionClaims?.role
+    const { role } = sessionsRole;
+
+    if (role !== "admin") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
+});
 
 export const config = {
   matcher: [
