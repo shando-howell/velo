@@ -16,6 +16,8 @@ export default clerkMiddleware(async (auth, req) => {
     // Check metatdata role property, redirect home if not an admin
     const sessionClaims = authObj.sessionClaims;
     const sessionsRole  = sessionClaims?.role
+
+    // @ts-expect-error *role is undefine*
     const { role } = sessionsRole;
 
     if (role !== "admin") {
