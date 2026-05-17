@@ -25,9 +25,9 @@ export default function AppointmentsPanel() {
     };
 
     return (
-        <main className="max-w-6xl mx-auto p-6">
+        <main className="mx-auto p-6">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">Appointments Panel</h1>
+                <h1 className="text-3xl font-bold text-yellow-600">Appointments Panel</h1>
                 <p className="text-gray-500 mt-1">Manage requested test drives and check inventory timelines.</p>
             </div>
 
@@ -36,6 +36,7 @@ export default function AppointmentsPanel() {
                     <thead>
                         <tr className="bg-gray-50 border-b border-gray-200 font-semibold uppercase text-gray-500 tracking-wider">
                             <th className="p-4">Customer Name</th>
+                            <th className="p-4">Customer Email</th>
                             <th className="p-4">Vehicle</th>
                             <th className="p-4">Date and Time</th>
                             <th className="p-4">Status </th>
@@ -53,6 +54,7 @@ export default function AppointmentsPanel() {
                             appointments.map((appointment) => (
                                 <tr key={appointment._id} className="hover:bg-gray-50/70 transition-colors">
                                     <td className="p-4 font-medium text-gray-900">{appointment.customerName}</td>
+                                    <td className="p-4 font-medium text-gray-900">{appointment.customerEmail}</td>
                                     <td className="p-4 text-gray-600">{appointment.carDetails}</td>
                                     <td className="p-4 text-gray-600">
                                         <div className="font-medium">{appointment.dateString}</div>

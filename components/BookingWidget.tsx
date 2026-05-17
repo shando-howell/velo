@@ -20,6 +20,7 @@ export default function BookingWidget({ carId }: { carId: Id<"cars">}) {
     const bookAppointment = useMutation(api.appointments.bookAppointment);
 
     const [customerName, setCustomerName] = useState("");
+    const [customerEmail, setCustomerEmail] = useState("");
     const [selectedDate, setSelectedDate] = useState(""); // Stores "YYYY-MM-DD"
     const [selectedTime, setSelectedTime] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,6 +44,7 @@ export default function BookingWidget({ carId }: { carId: Id<"cars">}) {
             await bookAppointment({
                 carId,
                 customerName,
+                customerEmail,
                 dateString: selectedDate,
                 timeSlot: selectedTime,
             });
@@ -80,6 +82,19 @@ export default function BookingWidget({ carId }: { carId: Id<"cars">}) {
                     onChange={(e) => setCustomerName(e.target.value)}
                     className="w-full border p-2 rounded-lg text-base"
                     placeholder="Enter your name"
+                />
+            </div>
+
+            {/* Customer Email */}
+            <div>
+                <label className="block text-base font-medium mb-1">Your Email Address</label>
+                <input
+                    type="text"
+                    required
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    className="w-full border p-2 rounded-lg text-base"
+                    placeholder="Enter your email address"
                 />
             </div>
 

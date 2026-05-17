@@ -5,11 +5,13 @@ export const schedule = mutation({
     args: {
         carId: v.id("cars"),
         customerName: v.string(),
+        customerEmail: v.string()
     },
     handler: async (ctx, args) => {
         return await ctx.db.insert("appointments", {
             carId: args.carId,
             customerName: args.customerName,
+            customerEmail: args.customerEmail,
             status: "pending"
         })
     }
@@ -43,6 +45,7 @@ export const bookAppointment = mutation({
     args: {
         carId: v.id("cars"),
         customerName: v.string(),
+        customerEmail: v.string(),
         dateString: v.string(), // "YYYY-MM-DD"
         timeSlot: v.string()
     },
@@ -70,6 +73,7 @@ export const bookAppointment = mutation({
         return await ctx.db.insert("appointments", {
             carId: args.carId,
             customerName: args.customerName,
+            customerEmail: args.customerEmail,
             dateString: args.dateString,
             timeSlot: args.timeSlot,
             status: "pending",

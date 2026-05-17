@@ -65,7 +65,7 @@ export default function AddCarForm() {
                             <h2 className="text-3xl font-bold text-yellow-600">Add A New Listing</h2>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium">Make</label>
+                            <label className="block font-medium">Make</label>
                             <input 
                                 required
                                 className="w-full border p-2 rounded"
@@ -74,7 +74,7 @@ export default function AddCarForm() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium">Model</label>
+                            <label className="block font-medium">Model</label>
                             <input 
                                 required
                                 className="w-full border p-2 rounded"
@@ -84,7 +84,7 @@ export default function AddCarForm() {
 
                         <div className="flex gap-4">
                             <div className="flex-1">
-                                <label className="block text-sm font-medium">Year</label>
+                                <label className="block font-medium">Year</label>
                                 <input
                                     type="number"
                                     className="w-full border p-2 rounded"
@@ -92,7 +92,7 @@ export default function AddCarForm() {
                                 />
                             </div>
                             <div className="flex-1">
-                                <label className="block text-sm font-medium">Price ($)</label>
+                                <label className="block font-medium">Price ($)</label>
                                 <input
                                     type="number"
                                     className="w-full border p-2 rounded"
@@ -102,13 +102,18 @@ export default function AddCarForm() {
                         </div>
                         
                         <div>
-                            <label className="block text-sm font-medium">Vehicle Image</label>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                className="w-full mt-1"
-                                onChange = {(e) => setSelectedImage(e.target.files?.[0] ?? null)}
-                            />
+                            <label className="block font-medium">Vehicle Image</label>
+                            <button className="hover:bg-blue-500 bg-blue-600 py-3 px-8 font-bold hover:shadow-xl shadow-lg rounded-lg uppercase">
+                                <input
+                                    type="file"
+                                    id="imageUpload"
+                                    accept="image/*"
+                                    className="w-full mt-1"
+                                    onChange = {(e) => setSelectedImage(e.target.files?.[0] ?? null)}
+                                    hidden
+                                />
+                                <label htmlFor="imageUpload" className="text-white">Upload Image</label>
+                            </button>
                         </div>
                         <div className="flex items-center justify-center">
                             <button

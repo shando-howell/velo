@@ -13,6 +13,7 @@ export default defineSchema({
     appointments: defineTable({
         carId: v.id("cars"),
         customerName: v.string(),
+        customerEmail: v.string(),
         dateString: v.optional(v.string()),
         timeSlot: v.optional(v.string()),
         status: v.union(v.literal("pending"), v.literal("confirmed"), v.literal("cancelled"))

@@ -41,17 +41,31 @@ export const getImageUrl = query({
 
 export const getInventory = query({
     handler: async (ctx) => {
-        const cars = await ctx.db.query("cars").collect();
+        return await ctx.db.query("cars").collect();
+    }
+})
 
-        // Map through cars to include the actual image URL
-        return Promise.all(
-            cars.map(async (car) => ({
+export const getPaginatedInventory = query({
+    args: { paginationOpts: v.any()},
+    handler: async (ctx, args) => {
+        const paginatedCars = await ctx.db
+            .query("cars")
+            .order("desc") // Newest additions first
+            .paginate(args.paginationOpts);
+
+        // Map through the paginated batch to include the actual image URL
+        const results = await Promise.all(
+            paginatedCars.page.map(async (car) => ({
                 ...car,
-                imageUrl: car.imageId
-                    ? await ctx.storage.getUrl(car.imageId)
-                    : null,
+                imageUrl: car.imageId ? await ctx.storage.getUrl(car.imageId) : null,
             }))
         );
+
+        // Return the updated array along with the pagination status objects
+        return {
+            ...paginatedCars,
+            page: results
+        };
     },
 });
 
@@ -105,3 +119,24 @@ export const deleteCar = mutation({
         await ctx.db.delete(args.id);
     },
 });
+
+// Get the latest listings query
+export const getLatestListings = query({
+    handler: async (ctx) => {
+        // Fetch the 3 most recently added cars
+        const cars = await ctx.db
+            .query("cars")
+            .order("desc")
+            .take(3);
+
+        // Mapping through the cars to resolve the storageId into a public URL
+        return Promise.all(
+            cars.map(async (car) => ({
+                ...car,
+                imageUrl: car.imageId
+                    ? await ctx.storage.getUrl(car.imageId)
+                    : null
+            }))
+        );
+    },
+}); 
