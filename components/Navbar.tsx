@@ -2,6 +2,7 @@ import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import MobileNav from "./MobileNav";
+import DashboardButton from "./DashboardButton";
 
 const Navbar = () => {
     return (
@@ -37,11 +38,7 @@ const Navbar = () => {
                                     Cars
                                 </Link>
                             </div>
-                            <div className="px-2 uppercase font-bold">
-                                <Link href="/admin/dashboard">
-                                    Dashboard
-                                </Link>
-                            </div>
+                            <DashboardButton />
                             <UserButton />
                         </Show>
                     </div>
