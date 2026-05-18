@@ -39,9 +39,15 @@ export const getImageUrl = query({
     },
 });
 
-export const getInventory = query({
-    handler: async (ctx) => {
-        return await ctx.db.query("cars").collect();
+export const getPaginatedListings = query({
+    args: {paginationOpts: v.any()},
+    handler: async (ctx, args) => {
+        const paginatedListings = await ctx.db
+            .query("cars")
+            .order("desc")
+            .paginate(args.paginationOpts)
+
+        return paginatedListings 
     }
 })
 

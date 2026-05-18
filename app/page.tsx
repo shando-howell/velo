@@ -17,12 +17,12 @@ export default function Home() {
           />
           <div className="absolute top-0 left-0 size-full bg-black/25 backdrop-blur-xs"/>
           <div className="flex flex-col gap-10 text-zinc-300 relative z-10">
-            <h1 className="font-semibold text-5xl max-w-3xl text-center">
+            <h1 className="font-semibold text-3xl lg:text-6xl max-w-3xl text-center">
               Find your dream car.
             </h1>
-            <Button asChild className="mx-auto bg-yellow-600 p-8 text-lg text-gray-200 uppercase tracking-widest gap-5">
+            <Button asChild className="mx-auto bg-yellow-600 p-8 text-base lg:text-lg text-gray-200 uppercase tracking-widest gap-5">
               <Link href="/inventory">
-                Explore Today
+                Explore Inventory
               </Link>
             </Button>
           </div>

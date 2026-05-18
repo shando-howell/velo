@@ -3,14 +3,17 @@
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from  "@/convex/_generated/dataModel";
-import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 export default function AppointmentsPanel() {
     const appointments = useQuery(api.appointments.getAllAppointments);
     const updateStatus = useMutation(api.appointments.updateAppointmentStatus);
 
     if (appointments === undefined) {
-        return <LoadingSkeleton/>
+        return (
+            <div className="max-w-7xl mx-auto p-6 text-center text-gray-500 animate-pulse">
+                Loading appointments...
+            </div>
+        )
     }
 
     const handleStatusChange = async (
