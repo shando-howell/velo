@@ -45,9 +45,12 @@ export default function InventoryPage() {
                                         className="object-cover"
                                     />
                                 ) : (
-                                    <div className="flex items-center justify-center h-full text-gray-400">
-                                        No Images Available
-                                    </div>
+                                    <Image
+                                        src="/assets/images/classified-placeholder.jpeg"
+                                        alt="Placeholder Image"
+                                        fill
+                                        className="object-cover"
+                                    />
                                 )}
                             </div>
 
