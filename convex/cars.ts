@@ -1,3 +1,4 @@
+import { relative } from "path";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -24,8 +25,7 @@ export const addCar = mutation({
             model: args.model,
             year: args.year,
             price: args.price,
-            imageId: args.imageId,
-            isAvailable: true,
+            imageId: args.imageId
         });
         return carId;
     },
@@ -83,9 +83,19 @@ export const getCarById = query({
             return null;
         }
 
+        let resolvedImageUrl = car.imageId;
+        if (!resolvedImageUrl.startsWith("http")) {
+            resolvedImageUrl = await ctx.storage.getUrl(car.imageId) ?? "";
+        }
+
+        // The OCC Lock Logic
+        const now: number = Date.now();
+        const isAvailable = !car.leaseExpiresAt || car.leaseExpiresAt < now;
+
         return {
             ...car,
-            imageUrl: car.imageId ? await ctx.storage.getUrl(car.imageId): null,
+            imageUrl: resolvedImageUrl,
+            isAvailable
         };
     },
 });
@@ -146,3 +156,51 @@ export const getLatestListings = query({
         );
     },
 }); 
+
+export const getAllCars = query({
+    args: {},
+    handler: async (ctx) => {
+        // 1. Fetch the raw inventory from the DB
+        const cars = await ctx.db.query("cars").collect();
+
+        // 2. Capture the exact server time for evaluation
+        const now = Date.now();
+
+        // 3. Map over the inventory to evaluate the leases
+        return Promise.all(cars.map(async (car) => {
+            // Hybrid Image Resolver
+            let resolvedImageUrl = car.imageId;
+
+            if (!resolvedImageUrl.startsWith("http")) {
+                resolvedImageUrl = await ctx.storage.getUrl(car.imageId) ?? "";
+            }
+
+            // OCC Logic: The car is available only if the lease doesn't exist,
+            // or if the expiration timestamp is in the past.
+            const isAvailable = !car.leaseExpiresAt || car.leaseExpiresAt < now;
+
+            return {
+                ...car,
+                imageUrl : resolvedImageUrl,
+                isAvailable,
+            };
+        }));
+    },
+});
+
+export const getSalesStaff = query({
+    args: {},
+    handler: async (ctx) => {
+        const staff = await ctx.db.query("salesStaff").collect();
+        const now = Date.now();
+
+        return staff.map((member) => {
+            const isAvailable = !member.leaseExpiresAt || member.leaseExpiresAt < now;
+
+            return {
+                ...member,
+                isAvailable,
+            };
+        });
+    },
+});

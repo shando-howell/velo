@@ -8,8 +8,23 @@ export default defineSchema({
         year: v.number(),
         price: v.number(),
         imageId: v.string(),
-        isAvailable: v.boolean()
-    }),
+        
+        // --- The OCC Lock Fields ---
+        heldBy: v.optional(v.string()),
+        leaseExpiresAt: v.optional(v.number())
+    })
+    .index("by_lease", ["leaseExpiresAt"]),
+
+    salesStaff: defineTable({
+        name: v.string(),
+        expertise: v.string(),
+
+        // --- The OCC Lock Fields ---
+        heldBy: v.optional(v.string()),
+        leaseExpiresAt: v.optional(v.number()),
+    })
+    .index("by_lease", ["leaseExpiresAt"]),
+
     appointments: defineTable({
         carId: v.id("cars"),
         customerName: v.string(),

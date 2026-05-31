@@ -4,10 +4,9 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Image from "next/image";
 import Link from "next/link";
-import LoadingSkeleton from "./LoadingSkeleton";
 
 export default function LatestListings() {
-    const latestCars = useQuery(api.cars.getLatestListings);
+    const latestCars = useQuery(api.cars.getAllCars);
 
     // Handle loading state
     if (latestCars === undefined) {
