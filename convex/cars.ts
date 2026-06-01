@@ -1,5 +1,5 @@
-import { relative } from "path";
 import { mutation, query } from "./_generated/server";
+import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 
 // Step 1: Generate the short-lived upload URL
@@ -51,26 +51,39 @@ export const getPaginatedListings = query({
     }
 })
 
-export const getPaginatedInventory = query({
-    args: { paginationOpts: v.any()},
+export const getPaginatedCars = query({
+    args: { paginationOpts: paginationOptsValidator},
     handler: async (ctx, args) => {
+        // 1. Fetch the requested slice of database documents
         const paginatedCars = await ctx.db
             .query("cars")
             .order("desc") // Newest additions first
             .paginate(args.paginationOpts);
 
-        // Map through the paginated batch to include the actual image URL
-        const results = await Promise.all(
-            paginatedCars.page.map(async (car) => ({
-                ...car,
-                imageUrl: car.imageId ? await ctx.storage.getUrl(car.imageId) : null,
-            }))
+        const now = Date.now();
+
+        // 2. Resolve image pointers and parse real-time transaction locks
+        const mappedPage = await Promise.all(
+            paginatedCars.page.map(async (car) => {
+                let resolvedImageUrl = car.imageId;
+                if (!resolvedImageUrl.startsWith("http")) {
+                    resolvedImageUrl = (await ctx.storage.getUrl(car.imageId)) ?? "";
+                }
+
+                const isAvailable = !car.leaseExpiresAt || car.leaseExpiresAt < now;
+
+                return {
+                    ...car,
+                    imageUrl: resolvedImageUrl,
+                    isAvailable,
+                };
+            })
         );
 
-        // Return the updated array along with the pagination status objects
+        // Return the modified payload to the client hook
         return {
             ...paginatedCars,
-            page: results
+            page: mappedPage,
         };
     },
 });

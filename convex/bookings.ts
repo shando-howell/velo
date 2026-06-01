@@ -60,3 +60,46 @@ export const acquireLease = mutation({
         };
     },
 });
+
+export const finalizeBooking = mutation({
+    args: {
+        carId: v.id("cars"),
+        userId: v.string(),
+        fullName: v.string(),
+        email: v.string(),
+        testDriveDate: v.string(),
+        driversLicense: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const car = await ctx.db.get(args.carId);
+        if (!car) throw new Error("Car was not found in the DB.");
+
+        const now = Date.now();
+
+        // Security check: Verify hey actually hold the active lease
+        if (car.heldBy !== args.userId) {
+            throw new Error("Security check failed: You do not own the active hold for this car.");
+        }
+        if (!car.leaseExpiresAt || car.leaseExpiresAt < now) {
+            throw new Error("Your hold has expired. Please try reserving again.")
+        }
+
+        const appointmentId = await ctx.db.insert("appointments", {
+            carId: args.carId,
+            userId: args.userId,
+            fullName: args.fullName,
+            email: args.email,
+            testDriveDate: args.testDriveDate,
+            driversLicense: args.driversLicense,
+            status: "confirmed",
+        });
+
+        // The Long Hold
+        const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+        await ctx.db.patch(args.carId, {
+            leaseExpiresAt: now + SEVEN_DAYS,
+        });
+
+        return { success: true, appointmentId };
+    },
+});

@@ -27,10 +27,11 @@ export default defineSchema({
 
     appointments: defineTable({
         carId: v.id("cars"),
-        customerName: v.string(),
-        customerEmail: v.string(),
-        dateString: v.optional(v.string()),
-        timeSlot: v.optional(v.string()),
-        status: v.union(v.literal("pending"), v.literal("confirmed"), v.literal("cancelled"))
-    }).index("by_car", ["carId"]),
+        userId: v.string(),
+        fullName: v.string(),
+        email: v.string(),
+        testDriveDate: v.string(),
+        driversLicense: v.string(),
+        status: v.string(),
+    }).index("by_user", ["userId"]),
 });

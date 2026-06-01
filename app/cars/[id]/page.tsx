@@ -5,7 +5,6 @@ import { Id } from "@/convex/_generated/dataModel";
 import ManageListingButtons from "@/components/ManageListingButtons";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import BookingPanel from "@/components/BookingPanel";
-import BookingWidget from "@/components/BookingWidget";
 
 interface CarPageProps {
     params: Promise<{ id: string }>
@@ -46,19 +45,25 @@ export default async function CarDetailsPage({ params } : CarPageProps) {
                         priority
                     />
                 </div>
-                <h1 className="text-4xl font-bold mt-1">{car.make} {car.model}</h1>
+                <h1 className="text-4xl text-yellow-600 font-bold mt-1">{car.make} {car.model}</h1>
+                <div className="border-t pt-6 py-4">
+                    <span className="text-gray-700 font-semibold uppercase tracking-wide">
+                        {car.year}
+                    </span>
+                    
+                    <p className="text-3xl font-light text-gray-700 py-2">
+                        ${car.price.toLocaleString()}
+                    </p>
+                    <h3 className="text-lg font-medium mb-2">Specifications</h3>
+                    <ul className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                        <li className="bg-gray-50 p-3 rounded-lg">Condition: Certified Pre-Owned</li>
+                        <li className="bg-gray-50 p-3 rounded-lg">Transmission: Automatic</li>
+                    </ul>
+                </div>
 
-                {/* Status Badge driven by the server-evaluated OCC lease boolean */}
-                {/* <div className="inline-flex items-center gap-2 px-3 py-1 rouned-full text-xs font-bold uppercase tracking-wider mb-8">
-                    {car.isAvailable ? (
-                        <span className="bg-green-100 text-green-800 px-2.5 py-0.5 rounded-full">Available</span>
-                    ) : (
-                        <span className="bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">Temporarily Reserved</span>
-                    )}
-                </div> */}
-
-                {/* Booking Widget Island */}
-                <BookingWidget carId={car._id} />
+                
+                {/* TO DO: Add admin auth check for manage listing buttons */}
+                <ManageListingButtons carId={car._id} initialData={car} />
             </div>
 
             {/* Right Column: Transactional Sidebar */}
@@ -82,25 +87,6 @@ export default async function CarDetailsPage({ params } : CarPageProps) {
                     salesStaffId={primaryRepresentative?._id}
                     userId={currentUserId}
                 />
-
-                <div className="border-t pt-6">
-                    <span className="text-blue-600 font-semibold uppercase tracking-wide">
-                        {car.year}
-                    </span>
-                    
-                    <p className="text-3xl font-light text-gray-700 py-2">
-                        ${car.price.toLocaleString()}
-                    </p>
-                    <h3 className="text-lg font-medium mb-2">Specifications</h3>
-                    <ul className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                        <li className="bg-gray-50 p-3 rounded-lg">Condition: Certified Pre-Owned</li>
-                        <li className="bg-gray-50 p-3 rounded-lg">Transmission: Automatic</li>
-                    </ul>
-                </div>
-
-                
-                {/* TO DO: Add admin auth check for manage listing buttons */}
-                <ManageListingButtons carId={car._id} initialData={car} />
             </div>
             </div>
         </main>

@@ -23,7 +23,7 @@ export default function MobileNav() {
             {/* Fullscreen Overlay */}
             <div className={`fixed inset-0 z-40 bg-yellow-600 text-white uppercase transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
                 <div className="flex flex-col items-center justify-center h-full space-y-8 text-2xl font-semibold">
-                    <Link href="/inventory" onClick={toggleMenu}>Cars</Link>
+                    <Link href="/cars" onClick={toggleMenu}>Cars</Link>
                     <Link href="/admin/dashboard" onClick={toggleMenu}>Dashboard</Link>
                 </div>
             </div>

@@ -34,7 +34,7 @@ export default function LatestListings() {
                     </h2>
                 </div>
                 <Link 
-                    href="/inventory"
+                    href="/cars"
                     className="text-sm font-medium text-yellow-600 hover:underline hidden sm:block"
                 >
                     View Full Inventory &rarr;
@@ -78,7 +78,7 @@ export default function LatestListings() {
                             </p>
 
                             <Link
-                                href={`/inventory/${car._id}`}
+                                href={`/cars/${car._id}`}
                                 className="mt-4 block w-full text-center bg-yellow-600 text-white py-2.5 rounded-xl text-xs font-semibold hover:bg-gray-800 transition"
                             >
                                 View Details

@@ -21,7 +21,7 @@ export default function Home() {
               Find your dream car.
             </h1>
             <Button asChild className="mx-auto bg-yellow-600 p-8 text-base lg:text-lg text-gray-200 uppercase tracking-widest gap-5">
-              <Link href="/inventory">
+              <Link href="/cars">
                 Explore Inventory
               </Link>
             </Button>

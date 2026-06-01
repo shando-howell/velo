@@ -34,7 +34,7 @@ const Navbar = () => {
                         </Show>
                         <Show when="signed-in">
                             <div className="px-2 uppercase font-bold">
-                                <Link href="/inventory">
+                                <Link href="/cars">
                                     Cars
                                 </Link>
                             </div>
