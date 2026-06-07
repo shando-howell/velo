@@ -34,7 +34,7 @@ export default defineSchema({
         testDriveDate: v.string(),
         driversLicense: v.string(),
         status: v.string(),
-    }).index("by_user", ["userId"]),
+    }).index("by_car_and_date", ["carId", "testDriveDate"]),
 
     users: defineTable({
         clerkId: v.string(),

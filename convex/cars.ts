@@ -161,15 +161,28 @@ export const getLatestListings = query({
             .order("desc")
             .take(3);
 
+        const now = Date.now();
+
         // Mapping through the cars to resolve the storageId into a public URL
-        return Promise.all(
-            cars.map(async (car) => ({
-                ...car,
-                imageUrl: car.imageId
-                    ? await ctx.storage.getUrl(car.imageId)
-                    : null
-            }))
+        const mappedCars = await Promise.all(
+            cars.map(async (car) => {
+                let imageUrl = null;
+
+                if (car.imageId) {
+                    imageUrl = await ctx.storage.getUrl(car.imageId)
+                }
+            
+                const isAvailable = !car.leaseExpiresAt || car.leaseExpiresAt < now;
+
+                return {
+                    ...car,
+                    imageUrl,
+                    isAvailable
+                }
+            })
         );
+
+        return mappedCars
     },
 }); 
 

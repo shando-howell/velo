@@ -1,5 +1,5 @@
 import { mutation, query } from "./_generated/server";
-import { v } from "convex/values";
+import { v, ConvexError } from "convex/values";
 
 export const acquireLease = mutation({
     args: {
@@ -130,3 +130,4 @@ export const getRecentBookings = query({
         return enrichedBookings;
     },
 });
+

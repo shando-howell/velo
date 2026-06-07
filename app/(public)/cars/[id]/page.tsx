@@ -3,7 +3,6 @@ import { api } from "@/convex/_generated/api";
 import Image from "next/image";
 import { Id } from "@/convex/_generated/dataModel";
 import ManageListingButtons from "@/components/ManageListingButtons";
-import LoadingSkeleton from "@/components/LoadingSkeleton";
 import BookingPanel from "@/components/BookingPanel";
 
 interface CarPageProps {
@@ -19,7 +18,11 @@ export default async function CarDetailsPage({ params } : CarPageProps) {
     const car = await fetchQuery(api.cars.getCarById, { id: carId });
 
     if (car === undefined) {
-        return <LoadingSkeleton />
+        return (
+            <div className="max-w-7xl mx-auto p-6 text-center text-gray-500 animate-pulse">
+                Loading car details...
+            </div>
+        )
     }
     if (car === null) return <div className="p-10 text-center">Car not found.</div>;
 
@@ -38,7 +41,7 @@ export default async function CarDetailsPage({ params } : CarPageProps) {
             <div className="lg:col-span-2">
                 <div className="relative h-96 w-full rounded-2xl overflow-hidden mb-6 shadow-sm">
                     <Image
-                        src={car.imageUrl}
+                        src={car.imageUrl ?? "/assets/images/classified-placeholder.png"}
                         alt={car.model}
                         fill
                         className="object-cover"
@@ -85,7 +88,7 @@ export default async function CarDetailsPage({ params } : CarPageProps) {
                 <BookingPanel
                     carId={carId}
                     salesStaffId={primaryRepresentative?._id}
-                    userId={currentUserId}
+                    userId={currentUserId as Id<"users">}
                 />
             </div>
             </div>

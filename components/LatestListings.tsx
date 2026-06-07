@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function LatestListings() {
-    const latestCars = useQuery(api.cars.getAllCars);
+    const latestCars = useQuery(api.cars.getLatestListings);
 
     // Handle loading state
     if (latestCars === undefined) {
@@ -64,27 +64,44 @@ export default function LatestListings() {
                                     Photo Coming Soon
                                 </div>
                             )}
+                            
+                            {/* Real-time Status Floating Badge */}
+                            <div className="absolute top-4 right-4">
+                                {car.isAvailable ? (
+                                    <span className="bg-emerald-500/90 backdrop-blur-md text-white
+                                    text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider
+                                    sahdow-sm">
+                                        Available
+                                    </span>
+                                ) : (
+                                    <span className="bg-amber-500/90 backdrop-blur-md text-white text-[10px]
+                                    font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                                        On Hold
+                                    </span>
+                                )}
+                            </div>
                         </div>
 
-                        {/* Car Data Information */}
-                        <div className="p-5">
-                            <span className="text-xs text-gray-400 font-medium">
-                                {car.year}
-                            </span>
-                            <h3 className="text-lg font-bold text-gray-900 mt-0.5 truncate">
-                                {car.make} {car.model}
-                            </h3>
-                            <p className="text-xl font-black text-green-600 mt-2">
-                                ${car.price.toLocaleString()}
-                            </p>
 
-                            <Link
-                                href={`/cars/${car._id}`}
-                                className="mt-4 block w-full text-center bg-yellow-600 text-white py-2.5 rounded-xl text-xs font-semibold hover:bg-gray-800 transition"
-                            >
-                                View Details
-                            </Link>
-                        </div>
+                            {/* Car Data Information */}
+                            <div className="p-5">
+                                <span className="text-xs text-gray-400 font-medium">
+                                    {car.year}
+                                </span>
+                                <h3 className="text-lg font-bold text-gray-900 mt-0.5 truncate">
+                                    {car.make} {car.model}
+                                </h3>
+                                <p className="text-xl font-black text-green-600 mt-2">
+                                    ${car.price.toLocaleString()}
+                                </p>
+
+                                <Link
+                                    href={`/cars/${car._id}`}
+                                    className="mt-4 block w-full text-center bg-yellow-600 text-white py-2.5 rounded-xl text-xs font-semibold hover:bg-gray-800 transition"
+                                >
+                                    View Details
+                                </Link>
+                            </div>
                     </div>
                 ))}
             </div>

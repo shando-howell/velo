@@ -44,7 +44,7 @@ export default function CarsPage() {
                         {/* Visual Header Canvas */}
                         <div className="relative h-60 w-full bg-gray-50 overfow-hidden">
                             <Image 
-                                src={car.imageUrl}
+                                src={car.imageUrl ?? "/assets/images/classified-placeholder.jpeg"}
                                 alt={`${car.make} ${car.model}`}
                                 fill
                                 sizes="(max-w-7xl) 33vw, 100vw"
