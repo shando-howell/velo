@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 export const acquireLease = mutation({
@@ -64,7 +64,7 @@ export const acquireLease = mutation({
 export const finalizeBooking = mutation({
     args: {
         carId: v.id("cars"),
-        userId: v.string(),
+        userId: v.id("users"),
         fullName: v.string(),
         email: v.string(),
         testDriveDate: v.string(),
@@ -84,7 +84,7 @@ export const finalizeBooking = mutation({
             throw new Error("Your hold has expired. Please try reserving again.")
         }
 
-        const appointmentId = await ctx.db.insert("appointments", {
+        const bookingId = await ctx.db.insert("bookings", {
             carId: args.carId,
             userId: args.userId,
             fullName: args.fullName,
@@ -100,6 +100,33 @@ export const finalizeBooking = mutation({
             leaseExpiresAt: now + SEVEN_DAYS,
         });
 
-        return { success: true, appointmentId };
+        return { success: true, bookingId };
+    },
+});
+
+export const getRecentBookings = query({
+    args: {},
+    handler: async (ctx) => {
+        // 1. Fetch the 6 most resent bookings
+        const bookings = await ctx.db
+            .query("bookings")
+            .order("desc")
+            .take(6);
+
+        const enrichedBookings = await Promise.all(
+            bookings.map(async (booking) => {
+                const car = await ctx.db.get(booking.carId);
+                const user = await ctx.db.get(booking.userId);
+
+                return {
+                    ...booking,
+                    car: car ? `${car.year} ${car.make} ${car.model}` : "Unknown Vehicle",
+                    customerName: user ? `${user.firstName} ${user.lastName}` : "Unknown Customer",
+                    customerEmail: user?.email || "No email",
+                };
+            })
+        );
+
+        return enrichedBookings;
     },
 });

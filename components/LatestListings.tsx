@@ -56,6 +56,7 @@ export default function LatestListings() {
                                     alt={`${car.make} ${car.model}`}
                                     fill
                                     sizes="(max-width: 768px) 100vw, 33vw"
+                                    unoptimized
                                     className="object-cover group-hover:scale-105 transition duration-300"
                                 />
                             ) : (

@@ -50,6 +50,7 @@ export default function CarsPage() {
                                 sizes="(max-w-7xl) 33vw, 100vw"
                                 className="object-cover group-hover:scale-102 transition-transform
                                 duration-500 ease-out"
+                                unoptimized
                                 priority={results.indexOf(car) < 3}
                             />
 

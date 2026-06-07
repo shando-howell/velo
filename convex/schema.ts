@@ -7,7 +7,8 @@ export default defineSchema({
         model: v.string(),
         year: v.number(),
         price: v.number(),
-        imageId: v.string(),
+        status: v.string(),
+        imageId: v.optional(v.id("_storage")),
         
         // --- The OCC Lock Fields ---
         heldBy: v.optional(v.string()),
@@ -25,13 +26,21 @@ export default defineSchema({
     })
     .index("by_lease", ["leaseExpiresAt"]),
 
-    appointments: defineTable({
+    bookings: defineTable({
         carId: v.id("cars"),
-        userId: v.string(),
+        userId: v.id("users"),
         fullName: v.string(),
         email: v.string(),
         testDriveDate: v.string(),
         driversLicense: v.string(),
         status: v.string(),
     }).index("by_user", ["userId"]),
+
+    users: defineTable({
+        clerkId: v.string(),
+        email: v.string(),
+        firstName: v.optional(v.string()),
+        lastName: v.optional(v.string()),
+        role: v.optional(v.string())
+    }).index("by_clerkId", ["clerkId"]),
 });

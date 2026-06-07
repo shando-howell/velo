@@ -43,7 +43,7 @@ export default function ManageListingButtons({carId, initialData}: ManageListing
         setIsDeleting(true);
         try {
             await deleteListing({id: carId});
-            router.push("/inventory");
+            router.push("/cars");
         } catch (error) {
             console.error("Failed to delete listing.", error);
             setIsDeleting(false);

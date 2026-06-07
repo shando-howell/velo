@@ -10,17 +10,8 @@ module.exports = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'acrobatic-lobster-641.convex.cloud',
-        port: '',
-        pathname: '/api/storage/**',
-        search: ''
+        hostname: '*.convex.cloud',
       },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      }
     ]
   }
 }

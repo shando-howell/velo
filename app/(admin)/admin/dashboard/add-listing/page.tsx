@@ -1,4 +1,4 @@
-import AddCarForm from "@/components/AddCarForm";
+import AddCarForm from "@/app/(admin)/admin/dashboard/AddCarForm";
 
 export default function AddListing() {
     return (

@@ -16,18 +16,19 @@ export const addCar = mutation({
         model: v.string(),
         year: v.number(),
         price: v.number(),
-        imageId: v.id("_storage"), // This is the ID returned after upload,
-        isAvailable: v.boolean()
+        status: v.string(),
+        imageId: v.optional(v.id("_storage")),
     },
     handler: async (ctx, args) => {
-        const carId = await ctx.db.insert("cars", {
+        const newCarId = await ctx.db.insert("cars", {
             make: args.make,
             model: args.model,
             year: args.year,
             price: args.price,
+            status: args.status,
             imageId: args.imageId
         });
-        return carId;
+        return newCarId;
     },
 });
 
@@ -65,16 +66,17 @@ export const getPaginatedCars = query({
         // 2. Resolve image pointers and parse real-time transaction locks
         const mappedPage = await Promise.all(
             paginatedCars.page.map(async (car) => {
-                let resolvedImageUrl = car.imageId;
-                if (!resolvedImageUrl.startsWith("http")) {
-                    resolvedImageUrl = (await ctx.storage.getUrl(car.imageId)) ?? "";
+                let imageUrl = null;
+
+                if (car.imageId) {
+                    imageUrl = await ctx.storage.getUrl(car.imageId);
                 }
 
                 const isAvailable = !car.leaseExpiresAt || car.leaseExpiresAt < now;
 
                 return {
                     ...car,
-                    imageUrl: resolvedImageUrl,
+                    imageUrl,
                     isAvailable,
                 };
             })
@@ -96,9 +98,10 @@ export const getCarById = query({
             return null;
         }
 
-        let resolvedImageUrl = car.imageId;
-        if (!resolvedImageUrl.startsWith("http")) {
-            resolvedImageUrl = await ctx.storage.getUrl(car.imageId) ?? "";
+        let imageUrl = null;
+
+        if (car.imageId) {
+            imageUrl = await ctx.storage.getUrl(car.imageId);
         }
 
         // The OCC Lock Logic
@@ -107,7 +110,7 @@ export const getCarById = query({
 
         return {
             ...car,
-            imageUrl: resolvedImageUrl,
+            imageUrl,
             isAvailable
         };
     },
@@ -174,18 +177,17 @@ export const getAllCars = query({
     args: {},
     handler: async (ctx) => {
         // 1. Fetch the raw inventory from the DB
-        const cars = await ctx.db.query("cars").collect();
+        const cars = await ctx.db.query("cars").order("desc").collect();
 
         // 2. Capture the exact server time for evaluation
         const now = Date.now();
 
         // 3. Map over the inventory to evaluate the leases
         return Promise.all(cars.map(async (car) => {
-            // Hybrid Image Resolver
-            let resolvedImageUrl = car.imageId;
+            let imageUrl = null;
 
-            if (!resolvedImageUrl.startsWith("http")) {
-                resolvedImageUrl = await ctx.storage.getUrl(car.imageId) ?? "";
+            if (car.imageId) {
+                imageUrl = await ctx.storage.getUrl(car.imageId);
             }
 
             // OCC Logic: The car is available only if the lease doesn't exist,
@@ -194,7 +196,7 @@ export const getAllCars = query({
 
             return {
                 ...car,
-                imageUrl : resolvedImageUrl,
+                imageUrl,
                 isAvailable,
             };
         }));
