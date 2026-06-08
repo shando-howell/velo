@@ -9,6 +9,7 @@ export default defineSchema({
         price: v.number(),
         status: v.string(),
         imageId: v.optional(v.id("_storage")),
+        assignedStaff: v.optional(v.id("salesStaff")),
         
         // --- The OCC Lock Fields ---
         heldBy: v.optional(v.string()),

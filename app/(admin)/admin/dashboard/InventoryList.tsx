@@ -3,6 +3,7 @@
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function InventoryList() {
     const cars = useQuery(api.cars.getAllCars);
@@ -53,9 +54,9 @@ export default function InventoryList() {
                             <span className="inline-flex items-center px-2.5 py-.05 rounded-full text-xs font-medium bg-blue-100 text-blue-800 capitalize">
                                 {car.status}
                             </span>
-                            <button className="text-sm text-slate-600 hover:text-slate-900 font-medium transition-colors">
-                                Edit Details
-                            </button>
+                            <Link href={`/admin/dashboard/cars/${car._id}/edit`} className="text-gray-500">
+                                Edit Listing
+                            </Link>
                         </div>
                     </div>
                 </div>

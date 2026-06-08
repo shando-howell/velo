@@ -13,6 +13,7 @@ import type * as bookings from "../bookings.js";
 import type * as cars from "../cars.js";
 import type * as http from "../http.js";
 import type * as seed from "../seed.js";
+import type * as staff from "../staff.js";
 import type * as users from "../users.js";
 
 import type {
@@ -27,6 +28,7 @@ declare const fullApi: ApiFromModules<{
   cars: typeof cars;
   http: typeof http;
   seed: typeof seed;
+  staff: typeof staff;
   users: typeof users;
 }>;
 

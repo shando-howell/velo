@@ -2,7 +2,6 @@ import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
 import Image from "next/image";
 import { Id } from "@/convex/_generated/dataModel";
-import ManageListingButtons from "@/components/ManageListingButtons";
 import BookingPanel from "@/components/BookingPanel";
 
 interface CarPageProps {
@@ -63,10 +62,6 @@ export default async function CarDetailsPage({ params } : CarPageProps) {
                         <li className="bg-gray-50 p-3 rounded-lg">Transmission: Automatic</li>
                     </ul>
                 </div>
-
-                
-                {/* TO DO: Add admin auth check for manage listing buttons */}
-                <ManageListingButtons carId={car._id} initialData={car} />
             </div>
 
             {/* Right Column: Transactional Sidebar */}

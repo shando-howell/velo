@@ -7,7 +7,7 @@ export default function LiveBookingFeed() {
     const bookings = useQuery(api.bookings.getRecentBookings);
 
     return (
-        <div className="h-full bg-white rounded-lg shadow-md border border-gray-100 overfow-hidden">
+        <div className="min-h-screen bg-white rounded-lg shadow-md border border-gray-100 overfow-hidden">
             <div className="px-6 py-5 border-b border-gray-200 flex justify-between items-center bg-slate-50">
                 <h3 className="text-lg font-semibold text-slate-900">Live Booking Feed</h3>
                 <span className="flex items-center text-sm font-medium text-green-600">

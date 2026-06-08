@@ -18,6 +18,7 @@ export const addCar = mutation({
         price: v.number(),
         status: v.string(),
         imageId: v.optional(v.id("_storage")),
+        assignedStaff: v.id("salesStaff")
     },
     handler: async (ctx, args) => {
         const newCarId = await ctx.db.insert("cars", {
@@ -26,7 +27,8 @@ export const addCar = mutation({
             year: args.year,
             price: args.price,
             status: args.status,
-            imageId: args.imageId
+            imageId: args.imageId,
+            assignedStaff: args.assignedStaff
         });
         return newCarId;
     },
@@ -119,17 +121,20 @@ export const getCarById = query({
 // Update car listing
 export const updateCar = mutation({
     args: {
-        id: v.id("cars"),
-        make: v.string(),
-        model: v.string(),
-        year: v.number(),
-        price: v.number()
+        carId: v.id("cars"),
+        price: v.number(),
+        assignedStaffId: v.optional(v.id("salesStaff"))
     },
     handler: async (ctx, args) => {
-        const {id, ...updates} = args;
+        // Security check
+        const identity = await ctx.auth.getUserIdentity();
+        if (!identity) throw new Error("Unauthorized");
 
         // Updates only the provided fields, leaving imageId intact
-        await ctx.db.patch(id, updates);
+        await ctx.db.patch(args.carId, {
+            price: args.price,
+            assignedStaff: args.assignedStaffId,
+        });
     },
 });
 

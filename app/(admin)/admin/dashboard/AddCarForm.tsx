@@ -74,10 +74,10 @@ export default function AddCarForm() {
     return (
         <div className="min-h-screen">
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-                <div className="p-2">
+                <div>
                     <form 
                         onSubmit={handleSubmit} 
-                        className="relative overflow-hidden shadow-2xl backdrop-blur-sm p-6 border-0  space-y-6 rounded-lg"
+                        className="relative overflow-hidden shadow-2xl backdrop-blur-sm p-6 border-0 space-y-6 rounded-lg"
                     >
                         {error && <p className="text-red-600 text-sm">{error}</p>}
                         <div className="text-center pb-6">
