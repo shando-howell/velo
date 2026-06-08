@@ -1,17 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { carFormSchema } from "@/lib/validations";
 import { Id } from "@/convex/_generated/dataModel";
 
 export default function AddCarForm() {
     const generateUploadUrl = useMutation(api.cars.generateUploadUrl);
+    const staffMembers = useQuery(api.staff.getAllStaff);
     const addCar = useMutation(api.cars.addCar);
 
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [salesStaffId, setSalesStaffId] = useState("");
     const [error, setError] = useState("");
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -58,6 +60,7 @@ export default function AddCarForm() {
                 ...validation.data,
                 status: "available",
                 imageId,
+                assignedStaff: salesStaffId as Id<"salesStaff">
             });
 
             // Reset form
@@ -139,6 +142,26 @@ export default function AddCarForm() {
                                 />
                                 <label htmlFor="imageUpload" className="text-gray-300">Upload Image</label>
                             </button>
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label htmlFor="staff-select" className="mb-1 text-sm font-medium">
+                                Assign Sales Staff
+                            </label>
+                            <select
+                                id="staff-select"
+                                value={salesStaffId}
+                                onChange={(e) => setSalesStaffId(e.target.value)}
+                                className="p-2 border rounded-md"
+                                required
+                            >
+                                <option value="" disabled>Select a team member</option>
+                                {staffMembers?.map((staff) => (
+                                    <option key={staff._id} value={staff._id}>
+                                        {staff.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="flex items-center justify-center">
                             <button
