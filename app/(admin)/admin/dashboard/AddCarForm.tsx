@@ -84,12 +84,12 @@ export default function AddCarForm() {
                     >
                         {error && <p className="text-red-600 text-sm">{error}</p>}
                         <div className="text-center pb-6">
-                            <h2 className="text-3xl font-bold text-gray-300">Add A New Listing</h2>
+                            <h2 className="text-3xl font-bold text-yellow-600">Add A New Listing</h2>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-300">Make</label>
+                                <label className="block text-sm font-medium text-gray-900">Make</label>
                                 <input 
                                     name="make"
                                     type="text"
@@ -98,7 +98,7 @@ export default function AddCarForm() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-300">Model</label>
+                                <label className="block text-sm font-medium text-gray-900">Model</label>
                                 <input 
                                     name="model"
                                     type="text"
@@ -110,7 +110,7 @@ export default function AddCarForm() {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-300">Year</label>
+                                <label className="block text-sm font-medium text-gray-900">Year</label>
                                 <input
                                     name="year"
                                     type="number"
@@ -119,7 +119,7 @@ export default function AddCarForm() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-300">Price ($)</label>
+                                <label className="block text-sm font-medium text-gray-900">Price ($)</label>
                                 <input
                                     name="price"
                                     type="number"
@@ -130,7 +130,7 @@ export default function AddCarForm() {
                         </div>
                         
                         <div>
-                            <label className="block text-sm text-gray-300 font-medium">Car Photo</label>
+                            <label className="block text-sm text-gray-900 font-medium">Car Photo</label>
                             <button className="hover:bg-blue-500 bg-blue-600 py-3 px-8 font-bold hover:shadow-xl shadow-lg rounded-lg uppercase">
                                 <input
                                     type="file"
@@ -140,7 +140,7 @@ export default function AddCarForm() {
                                     onChange = {(e) => setSelectedImage(e.target.files?.[0] || null)}
                                     hidden
                                 />
-                                <label htmlFor="imageUpload" className="text-gray-300">Upload Image</label>
+                                <label htmlFor="imageUpload" className="text-white">Upload Image</label>
                             </button>
                         </div>
 
@@ -167,7 +167,7 @@ export default function AddCarForm() {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="h-14 px-16 w-full hover:shadow-xl shadow-lg bg-green-600 hover:bg-green-500 text-gray-300 uppercase rounded-lg font-semibold disabled:bg-green-300 md:w-auto"
+                                className="h-14 px-16 w-full hover:shadow-xl shadow-lg bg-green-600 hover:bg-green-500 text-white uppercase rounded-lg font-semibold disabled:bg-green-300 md:w-auto"
                             >
                                 {isSubmitting ? "Adding..." : "Add Car to Lot"}
                             </button>

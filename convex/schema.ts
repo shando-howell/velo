@@ -37,6 +37,8 @@ export default defineSchema({
             v.literal("confirmed"),
             v.literal("completed")
         ),
+        confirmationToken: v.optional(v.string()),
+
         // The strict 10-minute lease timestamp
         expiresAt: v.optional(v.number()),
 
@@ -44,7 +46,9 @@ export default defineSchema({
         fullName: v.optional(v.string()),
         email: v.optional(v.string()),
         driversLicense: v.optional(v.string()),
-    }).index("by_car_and_date", ["carId", "date"]),
+    })
+    .index("by_car_and_date", ["carId", "date"])
+    .index("by_token", ["confirmationToken"]),
 
     users: defineTable({
         clerkId: v.string(),

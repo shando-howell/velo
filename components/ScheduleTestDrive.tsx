@@ -215,7 +215,7 @@ export default function ScheduleTestDrive({ carId }: { carId: Id<"cars"> }) {
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900">Booking Confirmed!</h2>
                     <p className="text-gray-600">
-                        Your test drive is locked in. We&apos;ll send a confirmation email to the provided email address.
+                        Your test drive is locked in. We sent a confirmation email to the provided email address.
                     </p>
                     <button
                         onClick={() => {

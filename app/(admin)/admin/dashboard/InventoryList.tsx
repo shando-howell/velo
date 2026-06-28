@@ -10,9 +10,7 @@ export default function InventoryList() {
 
     if (cars === undefined) {
         return (
-            <div className="animate-pulse bg-gray-200 h-64 rouned-md">
-                Loading cars...
-            </div>
+            <p className="animate-pulse">Loading cars...</p>
         )
     }
 

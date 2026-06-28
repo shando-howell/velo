@@ -30,15 +30,10 @@ export default async function AdminLayout({ children }: { children: ReactNode })
                 <ClerkProvider>
                     <ConvexClerkProvider>
                         <Navbar/>
-                        <div className="min-h-screen bg-gray-50 flex flex-col">
-                            <header className="bg-slate-900 text-white p-4 shadow-md">
-                                <h1 className="text-xl text-yellow-600 font-bold tracking-tight">
-                                    Velo Admin Panel
-                                </h1>
-                                <main className="flex-1 p-8">
-                                    {children}
-                                </main>
-                            </header>
+                        <div className="min-h-screen flex flex-col">
+                            <main className="flex-1">
+                                {children}
+                            </main>
                         </div>
                     </ConvexClerkProvider>
                 </ClerkProvider>

@@ -15,30 +15,17 @@ const Navbar = () => {
                         </Link>
                     </div>
                     <div className="flex items-center gap-4">
+                        <Link href="/cars" className="font-bold tracking-tight">
+                            CARS
+                        </Link>
                         <Show when="signed-out">
                             <div className="mr-2">
                                 <SignInButton mode="modal">
-                                    <Button className="text-sm font-medium text-gray-200 hover:text-gray-100 transition-colors">
-                                        Sign In
-                                    </Button>
+                                    ADMIN LOGIN
                                 </SignInButton>
-                            </div>
-
-                            <div>
-                                <SignUpButton mode="modal">
-                                    <Button className="text-sm font-medium bg-slate-900 text-white px-4 py-2 
-                                    rounded-md hover:bg-slate-800 transition-colors shadow-sm">
-                                        Sign Up
-                                    </Button>
-                                </SignUpButton>
                             </div>
                         </Show>
                         <Show when="signed-in">
-                            <div className="px-2 uppercase font-bold">
-                                <Link href="/cars">
-                                    Cars
-                                </Link>
-                            </div>
                             <DashboardButton />
                             <UserButton />
                         </Show>
