@@ -28,7 +28,7 @@ export default function CarsPage() {
                     Explore Current Inventory
                 </h1>
                 <p className="text-gray-500 mt-2 text-sm">
-                    Real-time availability directly from the showroom floor.
+                    Check out our latest listings.
                 </p>
             </div>
 
@@ -53,22 +53,6 @@ export default function CarsPage() {
                                 unoptimized
                                 priority={results.indexOf(car) < 3}
                             />
-
-                            {/* Real-time Status Floating Badge */}
-                            <div className="absolute top-4 right-4">
-                                {car.isAvailable ? (
-                                    <span className="bg-emerald-500/90 backdrop-blur-md text-white
-                                    text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider
-                                    sahdow-sm">
-                                        Available
-                                    </span>
-                                ) : (
-                                    <span className="bg-amber-500/90 backdrop-blur-md text-white text-[10px]
-                                    font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                                        On Hold
-                                    </span>
-                                )}
-                            </div>
                         </div>
 
                         {/* Content Area */}

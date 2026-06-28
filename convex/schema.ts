@@ -29,13 +29,22 @@ export default defineSchema({
 
     bookings: defineTable({
         carId: v.id("cars"),
-        userId: v.id("users"),
-        fullName: v.string(),
-        email: v.string(),
-        testDriveDate: v.string(),
-        driversLicense: v.string(),
-        status: v.string(),
-    }).index("by_car_and_date", ["carId", "testDriveDate"]),
+        date: v.string(),
+        startTime: v.string(),
+        endTime: v.string(),
+        status: v.union(
+            v.literal("pending"),
+            v.literal("confirmed"),
+            v.literal("completed")
+        ),
+        // The strict 10-minute lease timestamp
+        expiresAt: v.optional(v.number()),
+
+        // Driver Details
+        fullName: v.optional(v.string()),
+        email: v.optional(v.string()),
+        driversLicense: v.optional(v.string()),
+    }).index("by_car_and_date", ["carId", "date"]),
 
     users: defineTable({
         clerkId: v.string(),

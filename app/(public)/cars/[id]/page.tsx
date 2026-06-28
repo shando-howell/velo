@@ -2,7 +2,7 @@ import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
 import Image from "next/image";
 import { Id } from "@/convex/_generated/dataModel";
-import BookingPanel from "@/components/BookingPanel";
+import ScheduleTestDrive from "@/components/ScheduleTestDrive";
 
 interface CarPageProps {
     params: Promise<{ id: string }>
@@ -28,9 +28,6 @@ export default async function CarDetailsPage({ params } : CarPageProps) {
     // Grab the first available sales staff member
     const staffList = await fetchQuery(api.cars.getSalesStaff);
     const primaryRepresentative = staffList[0];
-
-    // Mocking a unique user session string
-    const currentUserId = "buyer-session-beta";
 
     return (
         <main className="max-w-6xl mx-auto py-12 px-6">
@@ -80,11 +77,7 @@ export default async function CarDetailsPage({ params } : CarPageProps) {
                     </div>
                 )}
                 {/* Booking Panel Island */}
-                <BookingPanel
-                    carId={carId}
-                    salesStaffId={primaryRepresentative?._id}
-                    userId={currentUserId as Id<"users">}
-                />
+                <ScheduleTestDrive carId={carId} />
             </div>
             </div>
         </main>
