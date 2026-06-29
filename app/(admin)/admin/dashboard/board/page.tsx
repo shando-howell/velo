@@ -3,15 +3,16 @@
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { DndContext, closestCorners, DragEndEvent } from "@dnd-kit/core";
-import { useState, useMemo } from "react";
+import { Id } from "@/convex/_generated/dataModel";
+import { WorkflowStage, VALID_STAGES } from "@/lib/types"
 
 import BoardColumn from "./BoardColumn";
-import ActiveCard from "./ActiveCard";
 import PendingCard from "./PendingCard";
 
 export default function AdminBoard() {
     const bookings = useQuery(api.admin.getBoardBookings);
     const forceVerify = useMutation(api.admin.forceVerifyBooking);
+    const updateStage = useMutation(api.bookings.updateBookingStage);
 
     // Loading state
     if (bookings === undefined) return <div>Loading board...</div>;
@@ -23,9 +24,9 @@ export default function AdminBoard() {
     const activeBookings = bookings.filter((b) => b.status === "confirmed");
 
     const columns = {
-        actionNeeded: activeBookings,
-        carPrepared: [], // To filter by stage
-        completed: [], // To filter by stage
+        actionNeeded: activeBookings.filter((b) => b.stage === "actionNeeded" || !b.stage),
+        carPrepared: activeBookings.filter((b) => b.stage === "carPrepped"),
+        completed: activeBookings.filter((b) => b.stage === "completed"),
     };
 
     // Handle the drag and drop event
@@ -33,8 +34,24 @@ export default function AdminBoard() {
         const { active, over } = event;
         if (!over) return;
 
-        // To add logic to update the booking's workflow stage
-        console.log(`Dragged booking ${active.id} over to column ${over.id}`);
+        const bookingId = active.id as Id<"bookings">;
+
+        const droppedZoneId = String(over.id);
+
+        if (!VALID_STAGES.includes(droppedZoneId as WorkflowStage)) {
+            console.warn(`Dropped in an invalid zone: ${droppedZoneId}`);
+            return;
+        }
+
+        const newStage = droppedZoneId as WorkflowStage;
+
+        // Prevent unnecessary database writes if dropped in the same column
+        const currentBooking = activeBookings.find(b => b._id === bookingId);
+        if (currentBooking?.stage === newStage) return;
+
+        updateStage({ bookingId, newStage }).catch((err) => {
+            console.error("Failed to update stage:", err)
+        });
     };
 
     return (

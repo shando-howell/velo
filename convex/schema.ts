@@ -39,6 +39,14 @@ export default defineSchema({
         ),
         confirmationToken: v.optional(v.string()),
 
+        // Physical Workflow State
+        stage: v.optional(v.union(
+            v.literal("actionNeeded"),
+            v.literal("carPrepped"),
+            v.literal("completed"),
+            v.literal("noShow")
+        )),
+
         // The strict 10-minute lease timestamp
         expiresAt: v.optional(v.number()),
 
