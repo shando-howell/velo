@@ -3,15 +3,14 @@
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 
-export default function ConfirmBookingPage() {
+function ConfirmBookingContent() {
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
 
     const verifyBooking = useMutation(api.bookings.verifyBooking);
-
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [message, setMessage] = useState("");
 
@@ -70,5 +69,13 @@ export default function ConfirmBookingPage() {
                 {status === "error" && <p className="text-red-500">{message}</p>}
             </div>
         </div>
+    );
+}
+
+export default function ConfirmBookingPage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading...</div>}>
+            <ConfirmBookingContent />
+        </Suspense>
     );
 }
