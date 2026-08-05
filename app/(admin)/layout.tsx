@@ -5,6 +5,7 @@ import ConvexClerkProvider from "@/components/ConvexProviderWithClerk";
 import { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import "../(public)/globals.css";
+import Footer from "@/components/Footer";
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
     // 1. Grab the current user's session data from Clerk
@@ -35,6 +36,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
                                 {children}
                             </main>
                         </div>
+                        <Footer />
                     </ConvexClerkProvider>
                 </ClerkProvider>
             </body>

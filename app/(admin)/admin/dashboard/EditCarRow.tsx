@@ -8,19 +8,17 @@ import { Id } from "@/convex/_generated/dataModel";
 interface EditCarProps {
     carId: Id<"cars">;
     currentPrice: number;
-    currentStaffId: Id<"salesStaff"> | "";
-    availableStaff: { id: string; name: string }[];
+    currentSpecifications: string;
 }
 
 export default function EditCarRow({
     carId,
     currentPrice,
-    currentStaffId,
-    availableStaff
+    currentSpecifications
 }: EditCarProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [price, setPrice] = useState(currentPrice);
-    const [staffId, setStaffId] = useState(currentStaffId);
+    const [specifications, setSpecifications] = useState(currentSpecifications);
     const [isSaving, setIsSaving] = useState(false);
 
     const updateCar = useMutation(api.cars.updateCar);
@@ -31,7 +29,8 @@ export default function EditCarRow({
             await updateCar({ 
                 carId, 
                 price, 
-                assignedStaffId: staffId === "" ? undefined : (staffId as Id<"salesStaff">)});
+                specifications
+            })
             setIsEditing(false);
         } catch (error) {
             console.error("Failed to update car", error);
@@ -42,12 +41,12 @@ export default function EditCarRow({
 
     if (!isEditing) {
         return (
-            <div className="flex items-center text-slate-700 gap-4 p-4 border-b">
+            <div className="flex flex-col text-slate-700 gap-4 p-4 border-b">
                 <p className="flex-1">Price: ${price.toLocaleString()}</p>
-                <p className="flex-1">Assigned To: {availableStaff.find(s => s.id === staffId)?.name || "Unassigned"}</p>
+                <p className="flex-1">Specifications: {specifications}</p>
                 <button
                     onClick={() => setIsEditing(true)}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                    className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-400 transition-colors"
                 >
                     Edit
                 </button>
@@ -56,7 +55,7 @@ export default function EditCarRow({
     }
 
     return (
-        <div className="flex items-center gap-4 p-4 border-b bg-blue-50">
+        <div className="flex flex-col gap-4 bg-white">
             <div className="flex-1">
                 <label className="block text-gray-500 mb-1">Price ($)</label>
                 <input
@@ -68,29 +67,20 @@ export default function EditCarRow({
             </div>
 
             <div className="flex-1">
-                <label className="block text-gray-500 mb-1">Assign Staff</label>
-                <select
-                    value={staffId}
-                    onChange={(e) => {
-                        const newStaffId = e.target.value as Id<"salesStaff">;
-                        setStaffId(newStaffId)
-                    }}
-                    className="w-full border rounded px-2 py-2 bg-white text-slate-700"
-                >
-                    <option value="">Unassigned</option>
-                    {availableStaff.map((staff) => (
-                        <option key={staff.id} value={staff.id}>
-                            {staff.name}
-                        </option>
-                    ))}
-                </select>
+                <label className="block text-gray-500 mb-1">Specifications</label>
+                <textarea
+                    rows={8}
+                    value={specifications}
+                    onChange={(e) => setSpecifications((e.target.value))}
+                    className="w-full border rounded px-2 py-1 text-slate-700"
+                />
             </div>
 
             <div className="flex gap-2 mt-5">
                 <button 
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700
+                    className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-400
                     disabled:bg-blue300 transition-colors"
                 >
                     {isSaving ? "Saving..." : "Save"}
@@ -98,7 +88,7 @@ export default function EditCarRow({
                 <button
                     onClick={() => {
                         setPrice(currentPrice);
-                        setStaffId(currentStaffId);
+                        setSpecifications(currentSpecifications);
                         setIsEditing(false);
                     }}
                     disabled={isSaving}

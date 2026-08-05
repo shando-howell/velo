@@ -53,11 +53,8 @@ export default async function CarDetailsPage({ params } : CarPageProps) {
                     <p className="text-3xl font-light text-gray-700 py-2">
                         ${car.price.toLocaleString()}
                     </p>
-                    <h3 className="text-lg font-medium mb-2">Specifications</h3>
-                    <ul className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                        <li className="bg-gray-50 p-3 rounded-lg">Condition: Certified Pre-Owned</li>
-                        <li className="bg-gray-50 p-3 rounded-lg">Transmission: Automatic</li>
-                    </ul>
+                    <h3 className="text-lg font-bold mb-2 border-t text-gray-700 py-2">Specifications</h3>
+                    <p className="text-gray-700">{car.specifications}</p>
                 </div>
             </div>
 

@@ -138,7 +138,7 @@ export default function ScheduleTestDrive({ carId }: { carId: Id<"cars"> }) {
                                         className={
                                             `py-2 rounded-lg text-sm font-medium transition-colors
                                             ${selectedTime === time
-                                                ? "bg-blue-600 text-white"
+                                                ? "bg-yellow-600 text-white"
                                                 : "bg-gray-50 border hover:bg-gray-100 text-gray-700"
                                             }`
                                         }
@@ -153,7 +153,7 @@ export default function ScheduleTestDrive({ carId }: { carId: Id<"cars"> }) {
                     <button
                         onClick={handleLockSlot}
                         disabled={!selectedTime}
-                        className="w-full bg-blue-600 text-white py-2 rounded"
+                        className="w-full bg-yellow-600 text-white py-2 rounded"
                     >
                         Lock Slot
                     </button>

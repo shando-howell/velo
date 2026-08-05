@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { usePaginatedQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Image from "next/image";
@@ -8,11 +9,26 @@ import Link from "next/link";
 const BATCH_SIZE = 6;
 
 export default function CarsPage() {
+    const [searchInput, setSearchInput] = useState("");
+    const [debouncedTerm, setDebouncedTerm] = useState("");
+
+    // Delay the query update until 300ms after the user stops typing
+    useEffect(() => {
+        const timer = setTimeout(() => setDebouncedTerm(searchInput), 300);
+        return () => clearTimeout(timer);
+    }, [searchInput]);
+
     const { results, status, loadMore } = usePaginatedQuery(
         api.cars.getPaginatedCars,
-        {},
+        { searchTerm: debouncedTerm },
         { initialNumItems: BATCH_SIZE }
     );
+
+    if (status === "LoadingFirstPage") {
+        return <div className="p-8 text-center text-gray-500 animate-pule">
+            Loading inventory...
+        </div>
+    }
 
     const handleLoadMore = () => {
         if (status === "CanLoadMore") {
@@ -23,13 +39,24 @@ export default function CarsPage() {
     return (
         <main className="max-w-7xl mx-auto py-12 px-6">
             {/* Header Context */}
-            <div className="mb-10">
-                <h1 className="text-4xl font-black text-yellow-600 tracking-tight">
-                    Explore Current Inventory
-                </h1>
-                <p className="text-gray-500 mt-2 text-sm">
-                    Check out our latest listings.
-                </p>
+            <div className="mb-10 flex flex-row">
+                <div className="flex-1">
+                    <h1 className="text-4xl font-black text-yellow-600 tracking-tight">
+                        Explore Current Inventory
+                    </h1>
+                    <p className="text-gray-500 mt-2 text-sm">
+                        Check out our latest listings.
+                    </p>
+                </div>
+                <div className="">
+                    <input
+                        type="text"
+                        placeholder="Search by make..."
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-yellow-600"
+                    />
+                </div>
             </div>
 
             {/* Main Grid Interface */}
@@ -57,7 +84,7 @@ export default function CarsPage() {
 
                         {/* Content Area */}
                         <div className="p-6">
-                            <span className="text-xs font-bold text-blue-600 uppercase
+                            <span className="text-xs font-bold text-gray-600 uppercase
                             tracking-widest">
                                 {car.year}
                             </span>
@@ -86,7 +113,7 @@ export default function CarsPage() {
                 {status === "CanLoadMore" && (
                     <button
                         onClick={handleLoadMore}
-                        className="px-8 py-3.5 bg-gray-900 hover:bg-gray-800 text-white
+                        className="px-8 py-3.5 bg-yellow-600 hover:bg-yellow-400 text-white
                         font-semibold rounded-2xl transition-all shadow-sm hover:shadow
                         active:scale-98 text-sm"
                     >
@@ -100,7 +127,7 @@ export default function CarsPage() {
                         {/* Subtle CSS Loading Ring */}
                         <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600
                         rounded-full animate-spin" />
-                        Querying serverless cluster...
+                        Querying showroom...
                     </div>
                 )}
 

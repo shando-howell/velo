@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import ConvexClerkProvider from "@/components/ConvexProviderWithClerk";
+import Footer from '@/components/Footer'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,6 +33,7 @@ export default function RootLayout({
           <ConvexClerkProvider>
             <Navbar />
             {children}
+            <Footer />
           </ConvexClerkProvider>
         </ClerkProvider>
       </body>

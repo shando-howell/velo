@@ -15,7 +15,7 @@ export default function AdminBoard() {
     const updateStage = useMutation(api.bookings.updateBookingStage);
 
     // Loading state
-    if (bookings === undefined) return <div>Loading board...</div>;
+    if (bookings === undefined) return <div className="animate-pule tex--gray-700 text-center">Loading bookings...</div>;
 
     // Separate the data - unverified leads stay out of the drag-and-drop context
     const pendingBookings = bookings.filter((b) => b.status === "pending");

@@ -13,9 +13,9 @@ const DashboardButton = () => {
 
     return (
         <>
-            {isAdmin && (<div className="px-2 uppercase font-bold">
+            {isAdmin && (<div className="px-2 uppercase text-white font-bold">
                 <Link href="/admin/dashboard">
-                    Dashboard
+                    Admin Dashboard
                 </Link>
             </div>)}
         </>

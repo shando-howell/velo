@@ -16,9 +16,9 @@ export const addCar = mutation({
         model: v.string(),
         year: v.number(),
         price: v.number(),
+        specifications: v.optional(v.string()),
         status: v.string(),
-        imageId: v.optional(v.id("_storage")),
-        assignedStaff: v.id("salesStaff")
+        imageId: v.optional(v.id("_storage"))
     },
     handler: async (ctx, args) => {
         const newCarId = await ctx.db.insert("cars", {
@@ -26,9 +26,9 @@ export const addCar = mutation({
             model: args.model,
             year: args.year,
             price: args.price,
+            specifications: args.specifications,
             status: args.status,
             imageId: args.imageId,
-            assignedStaff: args.assignedStaff
         });
         return newCarId;
     },
@@ -55,17 +55,48 @@ export const getPaginatedListings = query({
 })
 
 export const getPaginatedCars = query({
-    args: { paginationOpts: paginationOptsValidator},
+    args: { 
+        paginationOpts: paginationOptsValidator,
+        searchTerm: v.optional(v.string())
+    },
     handler: async (ctx, args) => {
-        // 1. Fetch the requested slice of database documents
+        // If there is an active search, route through the search index
+        if (args.searchTerm) {
+            const searchedPaginatedCars = await ctx.db
+                .query("cars")
+                .withSearchIndex("search_make", (q) => 
+                    q.search("make", args.searchTerm as string)
+                )
+                .paginate(args.paginationOpts);
+
+            const searchedMappedPage = await Promise.all(
+                searchedPaginatedCars.page.map(async (car) => {
+                    let imageUrl = null;
+
+                    if (car.imageId) {
+                        imageUrl = await ctx.storage.getUrl(car.imageId);
+                    }
+
+                    return {
+                        ...car,
+                        imageUrl,
+                    };
+                })
+            )
+
+            return {
+                ...searchedPaginatedCars,
+                page: searchedMappedPage,
+            };
+        }
+
+        // If no search queires, show all listings
         const paginatedCars = await ctx.db
             .query("cars")
             .order("desc") // Newest additions first
             .paginate(args.paginationOpts);
 
-        const now = Date.now();
-
-        // 2. Resolve image pointers and parse real-time transaction locks
+        // 2. Resolve image pointers
         const mappedPage = await Promise.all(
             paginatedCars.page.map(async (car) => {
                 let imageUrl = null;
@@ -74,12 +105,9 @@ export const getPaginatedCars = query({
                     imageUrl = await ctx.storage.getUrl(car.imageId);
                 }
 
-                const isAvailable = !car.leaseExpiresAt || car.leaseExpiresAt < now;
-
                 return {
                     ...car,
-                    imageUrl,
-                    isAvailable,
+                    imageUrl
                 };
             })
         );
@@ -123,7 +151,7 @@ export const updateCar = mutation({
     args: {
         carId: v.id("cars"),
         price: v.number(),
-        assignedStaffId: v.optional(v.id("salesStaff"))
+        specifications: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
         // Security check
@@ -133,7 +161,7 @@ export const updateCar = mutation({
         // Updates only the provided fields, leaving imageId intact
         await ctx.db.patch(args.carId, {
             price: args.price,
-            assignedStaff: args.assignedStaffId,
+            specifications: args.specifications
         });
     },
 });

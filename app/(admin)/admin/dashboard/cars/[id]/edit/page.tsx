@@ -12,10 +12,9 @@ export default function CarEditPage({ params }: {params: Promise<{id: string}>})
 
     // Fetch the specific car and the lits of all staff
     const car = useQuery(api.cars.getCarById, { id: carId });
-    const staffMembers = useQuery(api.staff.getAllStaff);
 
     // Handle loading states while Convex fetches the data
-    if (car === undefined || staffMembers === undefined) {
+    if (car === undefined) {
         return (
             <div className="p-8 text-center text-gray-500 animate-pulse">
                 Loading car details...
@@ -32,14 +31,8 @@ export default function CarEditPage({ params }: {params: Promise<{id: string}>})
         )
     }
 
-    const formattedStaff = staffMembers.map((staff) => ({
-        id: staff._id,
-        name: staff.name
-    }));
-
     return (
-        <div className="max-w-4xl mx-auto mt-8 bg-white shadow-sm
-        rounded-lg border border-gray-100">
+        <div className="max-w-4xl mx-auto mt-8 bg-white shadow-sm p-4 rounded-lg border border-gray-100">
             <div className="mb-6 border-b pb-4">
                 <h1 className="text-2xl font-bold text-gray-800">
                     Edit Listing: {car.make} {car.model}
@@ -52,8 +45,7 @@ export default function CarEditPage({ params }: {params: Promise<{id: string}>})
             <EditCarRow
                 carId={car._id}
                 currentPrice={car.price}
-                currentStaffId={(car.assignedStaff || "") as Id<"salesStaff"> | ""}
-                availableStaff={formattedStaff}
+                currentSpecifications={car.specifications ?? ""}
             />
         </div>
     );

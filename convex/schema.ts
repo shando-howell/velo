@@ -7,6 +7,7 @@ export default defineSchema({
         model: v.string(),
         year: v.number(),
         price: v.number(),
+        specifications: v.optional(v.string()),
         status: v.string(),
         imageId: v.optional(v.id("_storage")),
         assignedStaff: v.optional(v.id("salesStaff")),
@@ -15,7 +16,10 @@ export default defineSchema({
         heldBy: v.optional(v.string()),
         leaseExpiresAt: v.optional(v.number())
     })
-    .index("by_lease", ["leaseExpiresAt"]),
+    .index("by_lease", ["leaseExpiresAt"])
+    .searchIndex("search_make", {
+        searchField: "make",
+    }),
 
     salesStaff: defineTable({
         name: v.string(),

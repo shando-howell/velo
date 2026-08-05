@@ -1,19 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { carFormSchema } from "@/lib/validations";
 import { Id } from "@/convex/_generated/dataModel";
 
 export default function AddCarForm() {
     const generateUploadUrl = useMutation(api.cars.generateUploadUrl);
-    const staffMembers = useQuery(api.staff.getAllStaff);
     const addCar = useMutation(api.cars.addCar);
 
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [salesStaffId, setSalesStaffId] = useState("");
     const [error, setError] = useState("");
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,6 +26,7 @@ export default function AddCarForm() {
             model: formData.get("model"),
             year: formData.get("year"),
             price: formData.get("price"),
+            specifications: formData.get("specifications")
         };
 
         // 2. Validate with Zod
@@ -59,8 +58,7 @@ export default function AddCarForm() {
             await addCar({
                 ...validation.data,
                 status: "available",
-                imageId,
-                assignedStaff: salesStaffId as Id<"salesStaff">
+                imageId
             });
 
             // Reset form
@@ -87,7 +85,6 @@ export default function AddCarForm() {
                             <h2 className="text-3xl font-bold text-yellow-600">Add A New Listing</h2>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-
                             <div>
                                 <label className="block text-sm font-medium text-gray-900">Make</label>
                                 <input 
@@ -107,7 +104,6 @@ export default function AddCarForm() {
                                 />
                             </div>
                         </div>
-
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-900">Year</label>
@@ -127,49 +123,39 @@ export default function AddCarForm() {
                                     required
                                 />
                             </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-900">Specifications</label>
+                                <textarea
+                                    rows={4}
+                                    className="mt-1 block w-full border p-2 rounded-md border-gray-300 shadow-sm"
+                                    required
+                                />
+                            </div>
                         </div>
                         
-                        <div>
-                            <label className="block text-sm text-gray-900 font-medium">Car Photo</label>
-                            <button className="hover:bg-blue-500 bg-blue-600 py-3 px-8 font-bold hover:shadow-xl shadow-lg rounded-lg uppercase">
-                                <input
-                                    type="file"
-                                    id="imageUpload"
-                                    accept="image/*"
-                                    className="w-full mt-1"
-                                    onChange = {(e) => setSelectedImage(e.target.files?.[0] || null)}
-                                    hidden
-                                />
-                                <label htmlFor="imageUpload" className="text-white">Upload Image</label>
-                            </button>
-                        </div>
+                        
 
-                        <div className="flex flex-col">
-                            <label htmlFor="staff-select" className="mb-1 text-sm font-medium">
-                                Assign Sales Staff
-                            </label>
-                            <select
-                                id="staff-select"
-                                value={salesStaffId}
-                                onChange={(e) => setSalesStaffId(e.target.value)}
-                                className="p-2 border rounded-md"
-                                required
-                            >
-                                <option value="" disabled>Select a team member</option>
-                                {staffMembers?.map((staff) => (
-                                    <option key={staff._id} value={staff._id}>
-                                        {staff.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
                         <div className="flex items-center justify-center">
+                            <div>
+                                <button className="hover:bg-blue-500 bg-blue-600 mr-5 py-4 px-8 font-bold hover:shadow-xl shadow-lg rounded-lg uppercase">
+                                        <input
+                                            type="file"
+                                            id="imageUpload"
+                                            accept="image/*"
+                                            className="w-full mt-1"
+                                            onChange = {(e) => setSelectedImage(e.target.files?.[0] || null)}
+                                            hidden
+                                        />
+                                    <label htmlFor="imageUpload" className="text-white">Upload Car Photo</label>
+                                </button>
+                            </div>
+
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
                                 className="h-14 px-16 w-full hover:shadow-xl shadow-lg bg-green-600 hover:bg-green-500 text-white uppercase rounded-lg font-semibold disabled:bg-green-300 md:w-auto"
                             >
-                                {isSubmitting ? "Adding..." : "Add Car to Lot"}
+                                {isSubmitting ? "Adding..." : "Add To Inventory"}
                             </button>
                         </div>
                     </form>
