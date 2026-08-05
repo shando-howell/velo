@@ -5,6 +5,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import ConvexClerkProvider from "@/components/ConvexProviderWithClerk";
 import Footer from '@/components/Footer'
+import ConciergeWidget from '@/components/ConciergeWidget'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,6 +34,7 @@ export default function RootLayout({
           <ConvexClerkProvider>
             <Navbar />
             {children}
+            <ConciergeWidget />
             <Footer />
           </ConvexClerkProvider>
         </ClerkProvider>

@@ -61,7 +61,6 @@ export default defineSchema({
     })
     .index("by_car_and_date", ["carId", "date"])
     .index("by_token", ["confirmationToken"]),
-    // .index("by_status", ["status"]),
 
     users: defineTable({
         clerkId: v.string(),
@@ -70,4 +69,19 @@ export default defineSchema({
         lastName: v.optional(v.string()),
         role: v.optional(v.string())
     }).index("by_clerkId", ["clerkId"]),
+
+    supportTickets: defineTable({
+        department: v.union(
+            v.literal("sales"),
+            v.literal("bespoke"),
+            v.literal("support")
+        ),
+        clientEmail: v.string(),
+        message: v.string(),
+        status: v.union(
+            v.literal("open"),
+            v.literal("in-progress"),
+            v.literal("resolved")
+        ),
+    }).index("by_status", ["status"]),
 });

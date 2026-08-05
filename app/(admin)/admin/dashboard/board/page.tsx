@@ -11,11 +11,10 @@ import PendingCard from "./PendingCard";
 
 export default function AdminBoard() {
     const bookings = useQuery(api.admin.getBoardBookings);
-    const forceVerify = useMutation(api.admin.forceVerifyBooking);
     const updateStage = useMutation(api.bookings.updateBookingStage);
 
     // Loading state
-    if (bookings === undefined) return <div className="animate-pule tex--gray-700 text-center">Loading bookings...</div>;
+    if (bookings === undefined) return <div className="animate-pulse text-gray-700 text-center">Loading bookings...</div>;
 
     // Separate the data - unverified leads stay out of the drag-and-drop context
     const pendingBookings = bookings.filter((b) => b.status === "pending");
@@ -58,8 +57,9 @@ export default function AdminBoard() {
         <div className="bg-gray-100">
             <h1 className="text-3xl px-6 py-2 text-yellow-600">Bookings</h1>
 
-            <div className="flex h-screen p-6 overflow-x-auto gap-6">
-                {/* Column 1: The "Inbox" (Read-Only) */}
+            <div className="flex justify-center h-screen p-6 overflow-x-auto gap-6">
+
+                {/* Column 1: The "Inbox" (Read-Only) TO WORK ON*/}
                 <div className="w-70 shrink-0 bg-white rounded-lg shadow p-4 flex flex-col">
                     <h2 className="font-bold text-lg mb-4 text-gray-700">
                         Awaiting Verification ({pendingBookings.length})
@@ -69,7 +69,6 @@ export default function AdminBoard() {
                             <PendingCard
                                 key={booking._id}
                                 booking={booking}
-                                onForceVerify={() => forceVerify({ bookingId: booking._id })}
                             />
                         ))}
                         {pendingBookings.length === 0 && (

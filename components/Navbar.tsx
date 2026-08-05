@@ -7,7 +7,7 @@ const Navbar = () => {
     return (
         <>
             {/* Desktop View */}
-            <header className="hidden sticky top-0 w-full bg-yellow-600 p-3 md:flex flex-row items-center justify-center text-gray-200 supports-backdrop-filter:bg-yellow-600/80 backdrop-blur z-10">
+            <header className="hidden sticky top-0 w-full bg-yellow-600 p-3 md:flex flex-row items-center justify-center text-gray-200 supports-backdrop-filter:bg-yellow-600/80 backdrop-blur z-50">
                     <div className="flex-1 text-2xl uppercase font-bold tracking-widest text-white">
                         <Link href="/" className="text-xl font-bold tracking-tight">
                             <h1>Velo</h1>

@@ -80,7 +80,7 @@ export default function LatestListings() {
 
                             <Link
                                 href={`/cars/${car._id}`}
-                                className="mt-4 block w-full text-center bg-yellow-600 text-white py-2.5 rounded-xl text-xs font-semibold hover:bg-gray-800 transition"
+                                className="mt-4 block w-full text-center bg-yellow-600 text-white py-2.5 rounded-xl text-xs font-semibold hover:bg-yellow-500 transition"
                             >
                                 View Details
                             </Link>

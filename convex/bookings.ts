@@ -1,5 +1,5 @@
 import { mutation, query } from "./_generated/server";
-import { internal } from "./_generated/api";
+import { internal, api } from "./_generated/api";
 import { v } from "convex/values";
 
 // Calculate available slots dynamically
@@ -74,6 +74,13 @@ export const lockTimeSlot = mutation({
             status: "pending",
             expiresAt: tenMinutesFromNow,
         });
+
+        // Scheduled clean up for exactly 10 minutes from now
+        await ctx.scheduler.runAfter(
+            10 * 60 * 1000,
+            api.bookings.releaseSpecificHold,
+            { bookingId }
+        );
 
         return { bookingId, expiresAt: tenMinutesFromNow }
     },
@@ -171,4 +178,17 @@ export const updateBookingStage = mutation({
 
         return { success: true }
     }
+});
+
+// Release bookings with "pending" status
+export const releaseSpecificHold = mutation({
+    args: { bookingId: v.id("bookings") },
+    handler: async (ctx, args) => {
+        const booking = await ctx.db.get(args.bookingId);
+
+        // Only delete if the user never submitted their form
+        if (booking && booking.status === "pending") {
+            await ctx.db.delete(args.bookingId);
+        }
+    },
 });

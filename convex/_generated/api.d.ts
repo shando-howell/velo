@@ -16,6 +16,7 @@ import type * as emails from "../emails.js";
 import type * as http from "../http.js";
 import type * as seed from "../seed.js";
 import type * as staff from "../staff.js";
+import type * as support from "../support.js";
 import type * as users from "../users.js";
 
 import type {
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   seed: typeof seed;
   staff: typeof staff;
+  support: typeof support;
   users: typeof users;
 }>;
 
