@@ -55,35 +55,38 @@ export default function AdminBoard() {
     };
 
     return (
-        <div className="flex h-screen bg-gray-100 p-6 overflow-x-auto gap-6">
+        <div className="bg-gray-100">
+            <h1 className="text-3xl px-6 py-2 text-yellow-600">Bookings</h1>
 
-            {/* Column 1: The "Inbox" (Read-Only) */}
-            <div className="w-70 shrink-0 bg-white rounded-lg shadow p-4 flex flex-col">
-                <h2 className="font-bold text-lg mb-4 text-gray-700">
-                    Awaiting Verification ({pendingBookings.length})
-                </h2>
-                <div className="flex-1 overflow-y-auto space-y-3">
-                    {pendingBookings.map((booking) => (
-                        <PendingCard
-                            key={booking._id}
-                            booking={booking}
-                            onForceVerify={() => forceVerify({ bookingId: booking._id })}
-                        />
-                    ))}
-                    {pendingBookings.length === 0 && (
-                        <p className="text-sm text-gray-400 text-center mt-10">
-                            No pending leads.
-                        </p>
-                    )}
+            <div className="flex h-screen p-6 overflow-x-auto gap-6">
+                {/* Column 1: The "Inbox" (Read-Only) */}
+                <div className="w-70 shrink-0 bg-white rounded-lg shadow p-4 flex flex-col">
+                    <h2 className="font-bold text-lg mb-4 text-gray-700">
+                        Awaiting Verification ({pendingBookings.length})
+                    </h2>
+                    <div className="flex-1 overflow-y-auto space-y-3">
+                        {pendingBookings.map((booking) => (
+                            <PendingCard
+                                key={booking._id}
+                                booking={booking}
+                                onForceVerify={() => forceVerify({ bookingId: booking._id })}
+                            />
+                        ))}
+                        {pendingBookings.length === 0 && (
+                            <p className="text-sm text-gray-400 text-center mt-10">
+                                No pending leads.
+                            </p>
+                        )}
+                    </div>
                 </div>
-            </div>
 
-            {/* Columns 2+: Active Workflow (Wrapped in DndContext) */}
-            <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
-                <BoardColumn title="Action Needed" id="actionNeeded" items={columns.actionNeeded} />
-                <BoardColumn title="Car Prepped" id="carPrepped" items={columns.carPrepared} />
-                <BoardColumn title="Completed" id="completed" items={columns.completed} />
-            </DndContext>
+                {/* Columns 2+: Active Workflow (Wrapped in DndContext) */}
+                <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
+                    <BoardColumn title="Action Needed" id="actionNeeded" items={columns.actionNeeded} />
+                    <BoardColumn title="Car Prepped" id="carPrepped" items={columns.carPrepared} />
+                    <BoardColumn title="Completed" id="completed" items={columns.completed} />
+                </DndContext>
+            </div>
         </div>
     )
 }

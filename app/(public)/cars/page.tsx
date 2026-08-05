@@ -39,12 +39,12 @@ export default function CarsPage() {
     return (
         <main className="max-w-7xl mx-auto py-12 px-6">
             {/* Header Context */}
-            <div className="mb-10 flex flex-row">
+            <div className="mb-6 md:mb-10 flex flex-col md:flex-row">
                 <div className="flex-1">
                     <h1 className="text-4xl font-black text-yellow-600 tracking-tight">
                         Explore Current Inventory
                     </h1>
-                    <p className="text-gray-500 mt-2 text-sm">
+                    <p className="text-gray-500 mt-2 mb-2 md:mb-0text-sm">
                         Check out our latest listings.
                     </p>
                 </div>

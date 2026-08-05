@@ -68,7 +68,7 @@ export default function InventoryList() {
                                     <div className="flex justify-end gap-3">
                                         <Link
                                             href={`/admin/dashboard/cars/${car._id}/edit`}
-                                            className="text-yellow-600 border border-yellow-600 bg-yellow-400/10 p-2 tracking-wider transition-colors"
+                                            className="text-yellow-600 border border-yellow-600 bg-yellow-400/10 hover:bg-yellow-600 hover:text-white p-2 tracking-wider transition-colors"
                                         >
                                             Modify
                                         </Link>

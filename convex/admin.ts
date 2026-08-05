@@ -5,7 +5,11 @@ export const getBoardBookings = query({
     args: {},
     handler: async (ctx) => {
         // Fetch all bookings
-        const bookings = await ctx.db.query("bookings").collect();
+        const bookings = await ctx.db
+            .query("bookings")
+            // TO WORK ON
+            // .withIndex("by_status", (q) => q.eq("status", "confirmed"))
+            .collect();
 
         // Map over the bookings to attach the relevant car data and storage URLs
         const bookingsWithDetails = await Promise.all(

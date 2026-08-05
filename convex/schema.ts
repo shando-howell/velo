@@ -61,6 +61,7 @@ export default defineSchema({
     })
     .index("by_car_and_date", ["carId", "date"])
     .index("by_token", ["confirmationToken"]),
+    // .index("by_status", ["status"]),
 
     users: defineTable({
         clerkId: v.string(),
