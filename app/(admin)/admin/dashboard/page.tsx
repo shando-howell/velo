@@ -13,6 +13,11 @@ const Dashboard = () => {
                         Bookings
                     </Link>
                 </div>
+                <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row ">
+                    <Link href="/admin/dashboard/support" className="p-2 rounded-md bg-yellow-600 hover:bg-yellow-500 text-white ml-8">
+                        Support Tickets
+                    </Link>
+                </div>
             </div>
             <InventoryList />
         </div>

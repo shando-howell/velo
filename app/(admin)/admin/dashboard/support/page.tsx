@@ -31,7 +31,7 @@ export default function AdminTicketsTable() {
     }
 
     return (
-        <div className="bg-white p-6 rounded-xl border border-yellow-600 font-sans">
+        <div className="bg-white p-6 font-sans">
             <div className="mb-6">
                 <h2 className="text-2xl font-bold text-yellow-600 tracking-wide">Concierge Desk</h2>
                 <p className="text-gray-900 text-sm mt-1">Manage incoming client requests and bespoke inquries.</p>
@@ -107,7 +107,24 @@ export default function AdminTicketsTable() {
             </div>
 
             {/* Pagination Controls */}
-            {/* <div className */}
+            <div className="mt-6 flex justify-center items-center">
+                {status === "CanLoadMore" && (
+                    <button
+                        onClick={() => loadMore(10)}
+                        className="px-6 py-2 bg-yellow-600 text-white text-xs font-semibold
+                        tracking-wider uppercase border border-yellow-600 rounded hover:bg-yellow-600
+                        transition-colors"
+                    >
+                        Load Older Tickets
+                    </button>
+                )}
+
+                {status === "LoadingMore" && (
+                    <div className="px-6 py-2 text-gray-900 text-xs font-semibold tracking-wider uppercase animate-pulse">
+                        Loading...
+                    </div>
+                )}
+            </div>
         </div>
-    )
+    );
 }

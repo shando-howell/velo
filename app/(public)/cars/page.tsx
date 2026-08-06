@@ -25,7 +25,7 @@ export default function CarsPage() {
     );
 
     if (status === "LoadingFirstPage") {
-        return <div className="p-8 text-center text-gray-500 animate-pule">
+        return <div className="px-8 py-30 mb-40 text-center text-gray-500 animate-pule">
             Loading inventory...
         </div>
     }
@@ -65,8 +65,8 @@ export default function CarsPage() {
                     <Link
                         href={`/cars/${car._id}`}
                         key={car._id}
-                        className="group block bg-white border borger-gray-100 rounded-3xl 
-                        overflow-hidden sahdow-sm transition-all duration-300"
+                        className="group block bg-white border hover:border-yellow-400 rounded-3xl 
+                        overflow-hidden shadow-sm transition-all duration-300"
                     >
                         {/* Visual Header Canvas */}
                         <div className="relative h-60 w-full bg-gray-50 overfow-hidden">
