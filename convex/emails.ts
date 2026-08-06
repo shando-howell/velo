@@ -12,7 +12,7 @@ export const sendConfirmation = internalAction({
     },
     handler: async (ctx, args) => {
         // Confirmation URL
-        const domain = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        const domain = process.env.NEXT_PUBLIC_APP_URL;
         const confirmationLink = `${domain}/confirm-booking?token=${args.token}`;
 
         // Gmail SMTP transporter
